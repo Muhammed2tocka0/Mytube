@@ -21,29 +21,36 @@
         <button onclick="showTab('posts')">Посты</button>
         <button onclick="showTab('videos')">Видео</button>
         <button onclick="showTab('shorts')">Шортс</button>
+        <button onclick="showTab('profile')">Профиль</button>
       </div>
 
-      <div class="avatar" onclick="toggleMenu()">
-        <img id="avatar-img" src="" alt="avatar" />
-      </div>
-
-      <div id="menu" class="menu hidden">
-        <button onclick="showPopup('post')">+ Пост</button>
-        <button onclick="showPopup('video')">+ Видео</button>
-        <button onclick="changeAvatar()">Изменить аватарку</button>
-        <button onclick="logout()">Выйти</button>
+      <div class="header-actions">
+        <button onclick="showPopup('video')" id="add-video-btn">+ Видео</button>
+        <div class="avatar" onclick="toggleMenu()">
+          <img id="avatar-img" src="" alt="avatar" />
+        </div>
+        <div id="menu" class="menu hidden">
+          <button onclick="showPopup('post')">Опубликовать пост</button>
+          <button onclick="showPopup('video')">Опубликовать видео</button>
+          <button onclick="changeAvatar()">Изменить аватарку</button>
+          <button onclick="logout()">Выйти</button>
+        </div>
       </div>
     </header>
 
     <main>
       <div id="posts" class="tab"></div>
+
       <div id="videos" class="tab hidden">
         <input type="text" id="video-search" placeholder="Поиск видео..." oninput="filterVideos()" />
         <div id="video-list"></div>
       </div>
+
       <div id="shorts" class="tab hidden">
         <div id="shorts-list"></div>
       </div>
+
+      <div id="profile" class="tab hidden"></div>
     </main>
 
     <div class="popup hidden" id="popup-post">
@@ -58,6 +65,7 @@
   </div>
 
   <button onclick="toggleTheme()" id="theme-btn">🌞</button>
+
   <script src="script.js"></script>
 </body>
 </html>

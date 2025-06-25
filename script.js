@@ -1,7 +1,18 @@
-let currentUser = { name: "Пользователь" };
+let currentUser = null;
 
 function generateId() {
   return '_' + Math.random().toString(36).substr(2, 9);
+}
+
+function register() {
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value.trim();
+  if (!name || !email || !password) return alert("Заполните все поля!");
+
+  currentUser = { name, email, password };
+  localStorage.setItem("user", JSON.stringify(currentUser));
+  startApp();
 }
 
 function startApp() {
@@ -19,6 +30,7 @@ function startApp() {
 }
 
 function logout() {
+  localStorage.removeItem("user");
   location.reload();
 }
 
@@ -41,6 +53,7 @@ function saveData(type, data) {
 function publishPost() {
   const text = document.getElementById("post-text").value.trim();
   if (!text) return;
+
   const post = {
     id: generateId(),
     user: currentUser.name,
@@ -48,6 +61,7 @@ function publishPost() {
     likes: 0,
     comments: []
   };
+
   addPost(post);
   const posts = getData("posts");
   posts.unshift(post);
@@ -80,16 +94,17 @@ function publishVideo() {
 
   const reader = new FileReader();
   reader.onload = () => {
-    const video = document.createElement("video");
-    video.src = reader.result;
-
-    video.onloadedmetadata = () => {
-      const width = video.videoWidth;
-      const height = video.videoHeight;
+    const videoElement = document.createElement("video");
+    videoElement.src = reader.result;
+    videoElement.onloadedmetadata = () => {
+      const width = videoElement.videoWidth;
+      const height = videoElement.videoHeight;
       const aspectRatio = width / height;
 
       const isShort = aspectRatio < 1;
       const type = isShort ? "shorts" : "videos";
+      const container = isShort ? "shorts-list" : "video-list";
+
       const videoData = {
         id: generateId(),
         user: currentUser.name,
@@ -179,11 +194,50 @@ function changeAvatar() {
 function showTab(id) {
   document.querySelectorAll(".tab").forEach(t => t.classList.add("hidden"));
   document.getElementById(id).classList.remove("hidden");
+
+  if (id === "profile") {
+    const profile = document.getElementById("profile");
+    profile.innerHTML = `<h2>Профиль: ${currentUser.name}</h2>`;
+
+    const posts = getData("posts");
+    const videos = getData("videos");
+    const shorts = getData("shorts");
+
+    if (posts.length) {
+      profile.innerHTML += `<h3>Посты:</h3>`;
+      posts.forEach(p => profile.appendChild(createClonedPost(p)));
+    }
+
+    if (videos.length) {
+      profile.innerHTML += `<h3>Видео:</h3>`;
+      videos.forEach(v => profile.appendChild(createClonedVideo(v)));
+    }
+
+    if (shorts.length) {
+      profile.innerHTML += `<h3>Шортсы:</h3>`;
+      shorts.forEach(s => profile.appendChild(createClonedVideo(s, true)));
+    }
+  }
+}
+
+function createClonedPost(post) {
+  const el = document.createElement("div");
+  el.className = "post";
+  el.innerHTML = `<strong>${post.user}</strong><p>${post.text}</p><span>${post.likes} ❤️</span>`;
+  return el;
+}
+
+function createClonedVideo(video, isShort = false) {
+  const el = document.createElement("div");
+  el.className = isShort ? "video shorts-video" : "video";
+  el.innerHTML = `<strong>${video.user}</strong><h3>${video.title}</h3><video src="${video.src}" controls></video><span>${video.likes} ❤️</span>`;
+  return el;
 }
 
 function toggleTheme() {
   const dark = document.body.classList.toggle("dark");
   document.getElementById("theme-btn").textContent = dark ? "🌙" : "🌞";
+  localStorage.setItem("theme", dark ? "dark" : "light");
 }
 
 function filterVideos() {
@@ -202,5 +256,15 @@ function loadSavedContent() {
 }
 
 window.onload = () => {
-  startApp();
+  const saved = localStorage.getItem("user");
+  if (saved) {
+    currentUser = JSON.parse(saved);
+    startApp();
+  }
+
+  const theme = localStorage.getItem("theme");
+  if (theme === "dark") {
+    document.body.classList.add("dark");
+    document.getElementById("theme-btn").textContent = "🌙";
+  }
 };
