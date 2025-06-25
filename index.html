@@ -1,0 +1,67 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Моя Соцсеть</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-storage-compat.js"></script>
+</head>
+<body>
+  <div id="auth-container">
+    <h1>Регистрация</h1>
+    <input type="text" id="name" placeholder="Имя канала" />
+    <button onclick="start()">Войти</button>
+  </div>
+
+  <div id="main-container" class="hidden">
+    <header>
+      <div class="tabs">
+        <button onclick="showTab('posts')">Посты</button>
+        <button onclick="showTab('videos')">Видео</button>
+        <button onclick="showTab('shorts')">Шортс</button>
+        <button onclick="showTab('profile')">Профиль</button>
+      </div>
+      <div class="header-actions">
+        <button onclick="showPopup('video')" id="add-video-btn">+ Видео</button>
+        <div class="avatar" onclick="toggleMenu()">
+          <img id="avatar-img" src="" alt="avatar" />
+        </div>
+        <div id="menu" class="menu hidden">
+          <button onclick="showPopup('post')">Опубликовать пост</button>
+          <button onclick="showPopup('video')">Опубликовать видео</button>
+          <button onclick="logout()">Выйти</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <div id="posts" class="tab"></div>
+      <div id="videos" class="tab hidden">
+        <input type="text" id="video-search" placeholder="Поиск видео..." oninput="filterVideos()" />
+        <div id="video-list"></div>
+      </div>
+      <div id="shorts" class="tab hidden">
+        <div id="shorts-list"></div>
+      </div>
+      <div id="profile" class="tab hidden"></div>
+    </main>
+
+    <div class="popup hidden" id="popup-post">
+      <textarea id="post-text" placeholder="Введите текст поста..."></textarea>
+      <button onclick="publishPost()">Опубликовать</button>
+    </div>
+
+    <div class="popup hidden" id="popup-video">
+      <input type="file" id="video-file" accept="video/*" />
+      <button onclick="publishVideo()">Опубликовать видео</button>
+    </div>
+  </div>
+
+  <button onclick="toggleTheme()" id="theme-btn">🌞</button>
+  <script src="script.js"></script>
+</body>
+</html>
