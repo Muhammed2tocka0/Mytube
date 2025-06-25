@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MyTube Firebase</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div id="auth-container">
+    <h1>Вход или Регистрация</h1>
+    <input type="text" id="name" placeholder="Имя канала" />
+    <input type="email" id="email" placeholder="Email" />
+    <input type="password" id="password" placeholder="Пароль" />
+    <button onclick="register()">Зарегистрироваться</button>
+    <button onclick="login()">Войти</button>
+  </div>
+
+  <div id="main-container" class="hidden">
+    <header>
+      <div class="tabs">
+        <button onclick="showTab('videos')">Видео</button>
+        <button onclick="logout()">Выйти</button>
+      </div>
+    </header>
+
+    <main>
+      <div id="videos" class="tab">
+        <input type="file" id="video-file" accept="video/*" />
+        <button onclick="publishVideo()">Опубликовать видео</button>
+        <div id="video-list"></div>
+      </div>
+    </main>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.24.0/firebase-storage-compat.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "SENDER_ID",
+      appId: "APP_ID"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+  </script>
+  <script src="script.js"></script>
+</body>
+</html>
