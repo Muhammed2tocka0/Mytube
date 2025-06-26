@@ -88,6 +88,11 @@ function addPost(post) {
 }
 
 function publishVideo() {
+  if (!currentUser) {
+    alert("Сначала войдите в систему!");
+    return;
+  }
+
   const file = document.getElementById("video-file").files[0];
   const title = prompt("Введите название видео:");
   if (!file || !title) return alert("Выберите видео и введите название!");
@@ -103,7 +108,6 @@ function publishVideo() {
 
       const isShort = aspectRatio < 1;
       const type = isShort ? "shorts" : "videos";
-      const container = isShort ? "shorts-list" : "video-list";
 
       const videoData = {
         id: generateId(),
